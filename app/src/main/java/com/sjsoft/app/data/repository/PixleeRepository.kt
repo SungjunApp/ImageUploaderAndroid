@@ -54,7 +54,6 @@ class PixleeRepository constructor(
     }
 
     @ExperimentalCoroutinesApi
-    @SuppressLint("LogNotTimber")
     override suspend fun uploadImage(
         filePath: String,
         contentType: String
@@ -62,7 +61,6 @@ class PixleeRepository constructor(
         val keyName = "${AppConfig.pixleeEmail}/${UUID.randomUUID()}"
         var uploadInfo = UploadInfo(false)
         withContext(Dispatchers.IO) {
-            //awsS3.deleteObject(BuildConfig.AWS_S3_BUCKET_NAME, keyName)
             val file = File(filePath)
             val request = PutObjectRequest(BuildConfig.AWS_S3_BUCKET_NAME, keyName, file)
             val metadata = ObjectMetadata()
@@ -79,14 +77,9 @@ class PixleeRepository constructor(
                 true,
                 url = awsS3.getUrl(BuildConfig.AWS_S3_BUCKET_NAME, keyName).toExternalForm()
             )
-
-            Log.e("PixRepo", "PixRepo.end: ${uploadInfo.url}")
         }
 
         return uploadInfo
-        //PXLClient.initialize(BuildConfig.PIXLEE_API_KEY, BuildConfig.PIXLEE_SECRET_KEY)
-        //album.uploadImage(title, AppConfig.pixleeEmail, AppConfig.pixleeUserName, url, true)
-
     }
 
     override fun loadNextPageOfPhotos(options: PXLAlbumSortOptions?): Flow<ArrayList<PXLPhotoItem>> =
@@ -96,7 +89,6 @@ class PixleeRepository constructor(
             val jobError = 1
             var type = jobWorking
 
-            PXLClient.initialize(BuildConfig.PIXLEE_API_KEY)
             var remoteResult: ArrayList<PXLPhoto>? = null
 
             options?.also { album.setSortOptions(it) }
@@ -104,7 +96,6 @@ class PixleeRepository constructor(
             album.loadNextPageOfPhotos(object : PXLAlbum.RequestHandlers {
                 override fun DataLoadedHandler(photos: ArrayList<PXLPhoto>) {
                     remoteResult = photos
-                    Log.e("GalleryVM", "GalleryVM.remote.size: ${photos.size}")
                 }
 
                 override fun DataLoadFailedHandler(error: String?) {
@@ -125,12 +116,9 @@ class PixleeRepository constructor(
                     var lastIndex = -1
                     val result = ArrayList<PXLPhotoItem>()
 
-                    Log.e("GalleryVM", "GalleryVM.remote + remoteResult-pre.size: ${it.size}")
                     it.forEach {
                         result.add(PXLPhotoItem(++lastIndex, it))
                     }
-                    Log.e("GalleryVM", "GalleryVM.remote + old.size: ${result.size}")
-                    Log.e("GalleryVM", "GalleryVM.remote + remoteResult-post.size: ${it.size}")
                     emit(result)
                     type = jobFinished
                 }

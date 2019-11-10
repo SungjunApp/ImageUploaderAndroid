@@ -32,10 +32,6 @@ class UploadViewModel
             val list = pixlee.getS3Images()
             listUI.value = ListUI.Data(list)
 
-
-            list.forEach {
-                Log.e("UploadVM", "UploadVM.it.key: ${it.s3Object.key}")
-            }
         }, {
             loadMoreUI.value = true
             listUI.value = ListUI.LoadingHidden

@@ -199,10 +199,6 @@ class UploadFragment : BaseFragment(), Injectable {
                     val filePath = cursor.getString(cursor.getColumnIndex(filePathColumn[0]))
                     val mimeType = cursor.getString(cursor.getColumnIndex(filePathColumn[1]))
                     viewModel.uploadImage(filePath, mimeType)
-                    Log.e(
-                        "HomeFragment",
-                        "HomeFragment.picturePath: $filePath, mimeType: $mimeType"
-                    )
                     //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath))
                 }
             } catch (e: Exception) {

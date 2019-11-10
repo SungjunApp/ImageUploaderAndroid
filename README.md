@@ -10,7 +10,6 @@ Click to watch
 ```
 #Pixlee SDK
 pixleeAPIKey={API Key for Pixlee SDK}
-pixleeSecretKey={Secret Key for Pixlee SDK}
 
 #PRODUCTION AWS S3
 awsAccessKey={Access Key for AWS S3}
