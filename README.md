@@ -30,8 +30,14 @@ s3DomainForDev={domain including bucket name, ex: http://s3.amazonaws.com/sdk-pr
 
 ![make](doc/img/gradle_example.png)
 
+5. Choose one of Build variants
+    - Production: prodDebug or prodRelease
+    - Development: devDebug, devRelease
+    
+![make](doc/img/build_variants.png)
 
-5. Run the project on an Android device
+
+6. Run the project on an Android device
 
 
 # Unit Test
