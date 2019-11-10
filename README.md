@@ -1,10 +1,12 @@
 # Demo Video
 Click to watch
+
 [![](http://img.youtube.com/vi/0gFMnc3a_nY/0.jpg)](http://www.youtube.com/watch?v=0gFMnc3a_nY "")
 
 # Get Started
-
-1. Generate **key.properties** in the project folder and fill it with the credentials below: 
+1. Import this project into Android Studio, version: 3.5.1
+1. Generate **key.properties** in the project folder 
+2. Fill the file with the example below and edit it with your own credentials for Production and Development: 
 ```
 #Pixlee SDK
 pixleeAPIKey={API Key for Pixlee SDK}
@@ -24,7 +26,7 @@ awsS3BucketNameForDev={S3 bucket name}
 awsRegionForDev={region, ex: 'us-east-1' }
 s3DomainForDev={domain including bucket name, ex: http://s3.amazonaws.com/sdk-project.pixlee.com/}
 ```
-1. Run the project
+4. Run the project on an Android device
 
 
 # Unit Test
