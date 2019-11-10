@@ -1,0 +1,275 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+androidExtensions {
+    experimental = true
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.sjsoft.app"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    android {
+        sourceSets {
+            String sharedTestDir = 'src/sharedTest/java'
+            test {
+                java.srcDir sharedTestDir
+            }
+            androidTest {
+                java.srcDir sharedTestDir
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        prod {
+            dimension "default"
+            manifestPlaceholders = [
+                    appNameGradle: "Pixlee"
+            ]
+            buildConfigField "String", "PIXLEE_API_KEY", "\"" + PIXLEE_API_KEY + "\""
+            buildConfigField "String", "PIXLEE_SECRET_KEY", "\"" + PIXLEE_SECRET_KEY + "\""
+            buildConfigField "String", "AWS_ACCESS_KEY", "\"" + AWS_ACCESS_KEY + "\""
+            buildConfigField "String", "AWS_SECRET_KEY", "\"" + AWS_SECRET_KEY + "\""
+            buildConfigField "String", "AWS_S3_BUCKET_NAME", "\"" + AWS_S3_BUCKET_NAME + "\""
+            buildConfigField "String", "AWS_REGION", "\"" + AWS_REGION + "\""
+            buildConfigField "String", "AWS_S3_DOMAIN", "\"" + AWS_S3_DOMAIN + "\""
+        }
+        dev {
+            dimension "default"
+            applicationIdSuffix = ".dev"
+            manifestPlaceholders = [
+                    appNameGradle: "PixTest"
+            ]
+            buildConfigField "String", "PIXLEE_API_KEY", "\"" + PIXLEE_API_KEY+ "\""
+            buildConfigField "String", "PIXLEE_SECRET_KEY", "\"" + PIXLEE_SECRET_KEY+ "\""
+            buildConfigField "String", "AWS_ACCESS_KEY", "\"" + AWS_ACCESS_KEY_DEV + "\""
+            buildConfigField "String", "AWS_SECRET_KEY", "\"" + AWS_SECRET_KEY_DEV + "\""
+            buildConfigField "String", "AWS_S3_BUCKET_NAME", "\"" + AWS_S3_BUCKET_NAME_DEV + "\""
+            buildConfigField "String", "AWS_REGION", "\"" + AWS_REGION_DEV + "\""
+            buildConfigField "String", "AWS_S3_DOMAIN", "\"" + AWS_S3_DOMAIN_DEV + "\""
+
+        }
+
+    }
+
+    testOptions.unitTests.returnDefaultValues = true
+    testOptions.unitTests.all {
+
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+}
+
+//task copyResourcesToClasses(type: Copy) {
+//    from "${projectDir}/src/test/resources"
+//    into "${buildDir}/intermediates/classes/test/debug/resources"
+//}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines"
+
+    // Dependencies for local unit tests
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    //testImplementation "android.arch.core:core-testing:1.1.1"
+    testImplementation "androidx.arch.core:core-testing:$arch_core"
+    //testImplementation 'androidx.test.ext:junit:1.1.0'
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation "androidx.test.ext:junit-ktx:1.1.1"
+    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
+//    androidTestImplementation "junit:junit:4.12"
+
+    // Dependencies for Android unit tests
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Android Testing Support Library - Instrumented testing
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'androidx.test:monitor:1.2.0'
+    testImplementation "org.robolectric:robolectric:4.3"
+    //implementation "com.google.guava:guava:$rootProject.ext.guavaVersion"
+
+    /**
+     * Multi-Dex
+     */
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    /**
+     * Architecture Component
+     */
+    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.1.0"
+
+    /**
+     * Navigation
+     */
+    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-rc01"
+
+    /**
+     * Room Entities
+     */
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
+
+
+    /**
+     * Paging
+     */
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+
+
+    /**
+     * Network
+     */
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp3"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3"
+
+    /**
+     * Rx
+     */
+    implementation "io.reactivex.rxjava2:rxjava:$rxJava"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin"
+
+    /**
+     * Glide(Image library)
+     */
+    implementation "com.github.bumptech.glide:glide:4.9.0"
+    implementation "com.github.bumptech.glide:annotations:4.9.0"
+    kapt "com.github.bumptech.glide:compiler:4.9.0"
+
+    /**
+     * Json Logging
+     */
+    implementation 'com.orhanobut:logger:2.2.0'
+
+    /**
+     * Web3J - etherium
+     */
+    //implementation "org.web3j:core:3.1.1-android"
+    implementation "org.web3j:core:4.2.0-android"
+    implementation "org.ethereum:geth:1.7.0"
+
+    /**
+     * Dagger2
+     */
+    kapt "com.google.dagger:dagger-compiler:$dagger2_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger2_version"
+
+    implementation "com.google.dagger:dagger:$dagger2_version"
+    implementation "com.google.dagger:dagger-android:$dagger2_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger2_version"
+    // if you use the support libraries
+
+    /**
+     * Android Support Libraries
+     */
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.legacy:legacy-support-core-ui:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    /**
+     * Rx Utils
+     */
+    implementation "com.jakewharton.rxbinding2:rxbinding:2.1.1"
+    implementation "com.jakewharton.rxrelay2:rxrelay:2.0.0"
+
+    /**
+     * Gson
+     */
+    //implementation "com.google.code.gson:gson:2.8.5"
+
+    /**
+     * Debuging Network & Resources
+     */
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+
+    /**
+     * UI Loading
+     */
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    /**
+     * logger
+     */
+    implementation "com.jakewharton.timber:timber:4.7.1"
+    implementation project(path: ':pixleesdk')
+
+    /**
+     * Material Tap Target Prompt
+     */
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:3.0.0'
+
+    /**
+     * AWS
+     */
+//    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
+//    implementation 'com.amazonaws:aws-java-sdk-s3'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.16.3'
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.16.3'
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.16.3'
+
+}

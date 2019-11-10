@@ -1,0 +1,102 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.3.50'
+    ext.coroutines = "1.3.1"
+    repositories {
+        google()
+        jcenter()
+        
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.google.com/' }
+        
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+def keystorePropertiesFile = rootProject.file("key.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+ext {
+
+    PIXLEE_API_KEY = keystoreProperties['pixleeAPIKey']
+    PIXLEE_SECRET_KEY = keystoreProperties['pixleeSecretKey']
+
+    AWS_ACCESS_KEY = keystoreProperties['awsAccessKey']
+    AWS_SECRET_KEY = keystoreProperties['awsSecretKey']
+    AWS_S3_BUCKET_NAME = keystoreProperties['awsS3BucketName']
+    AWS_REGION = keystoreProperties['awsRegion']
+    AWS_S3_DOMAIN = keystoreProperties['s3Domain']
+
+    AWS_ACCESS_KEY_DEV = keystoreProperties['awsAccessKeyForDev']
+    AWS_SECRET_KEY_DEV = keystoreProperties['awsSecretKeyForDev']
+    AWS_S3_BUCKET_NAME_DEV = keystoreProperties['awsS3BucketNameForDev']
+    AWS_REGION_DEV = keystoreProperties['awsRegionForDev']
+    AWS_S3_DOMAIN_DEV = keystoreProperties['s3DomainForDev']
+
+
+    // Sdk and tools
+    buildToolsVersion = '28.0.3'
+    targetSdkVersion = 28
+    compileSdkVersion = 28
+    minSdkVersion = 23
+
+    //Fireabase version : https://firebase.google.com/docs/android/setup?authuser=0
+    firebase_core = "16.0.3"
+    firebase_invite = "16.0.3"
+    firebase_msg = "17.3.0"
+    firebase_ads = "15.0.1"
+    googleSupport_map = "15.0.1"
+
+    arch_core = "2.0.1"
+
+    // App dependencies
+    supportLibVersion = '1.1.0-alpha02' //Beta version
+
+    rxkotlin = "2.3.0"
+    rxJava = "2.2.8"
+    rxAndroid = "2.1.1"
+    //jodaTime = "2.9.9.4"
+    gson = "2.8.5"
+    glide = "4.9.0"
+    //glide_transformations = "3.2.0"
+
+    retrofit2 = "2.6.2"
+    okhttp3 = "4.2.0"
+
+    /**
+     * testing
+     */
+    guavaVersion = '18.0'
+    junitVersion = '4.12'
+    mockitoVersion = '3.1.0'
+    robolectricVersion = '4.0.2'
+    hamcrestVersion = '1.3'
+    runnerVersion = '1.1.0'
+    rulesVersion = '0.5'
+    espressoVersion = '3.1.0-alpha4'
+
+    //Room
+    room_version = '2.1.0'
+    dagger2_version = '2.16'
+
+    pagingVersion = '2.1.0'
+}

@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Pixlee Demo</string>
+
+    <string name="title_main">Main</string>
+    <string name="title_gallery">Gallery</string>
+    <string name="title_upload_a_pic">Upload a photo</string>
+
+    <!--common -->
+    <string name="no_photo">No Item</string>
+    <string name="button_more">Load more</string>
+    <string name="uploading">Uploading..</string>
+    <string name="title_guide_viewer">Item Viewer</string>
+    <string name="message_guide_list">Click to see this image</string>
+    <string name="message_guide_upload">Click to see this uploaded item</string>
+
+    <!-- Upload -->
+    <string name="upload_success_message">Complete</string>
+    <string name="upload_failure_message">Failed</string>
+    <string name="storage_permission_for_uploading">\'Storage\' permission is needed to upload a photo in the app setting</string>
+    <string name="button_setting">Setting</string>
+</resources>

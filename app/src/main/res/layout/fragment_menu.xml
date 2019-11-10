@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nested_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_gallery"
+        android:text="@string/title_gallery"
+        style="@style/NextButtonOutLined"
+        app:cornerRadius="3dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/v_upload"
+        />
+
+    <RelativeLayout
+        android:id="@+id/v_upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_gallery"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_upload"
+            android:text="@string/title_upload_a_pic"
+            style="@style/NextButtonOutLined"
+            app:cornerRadius="3dp"
+            />
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
