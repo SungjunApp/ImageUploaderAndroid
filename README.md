@@ -5,8 +5,8 @@ Click to watch
 
 # Get Started
 1. Import this project into Android Studio, version: 3.5.1
-1. Generate **key.properties** in the project folder 
-2. Fill the file with the example below and edit it with your own credentials for Production and Development: 
+2. Generate **key.properties** in the project folder 
+3. Fill the file with the example below and edit it with your own credentials for Production and Development: 
 ```
 #Pixlee SDK
 pixleeAPIKey={API Key for Pixlee SDK}
@@ -25,7 +25,13 @@ awsS3BucketNameForDev={S3 bucket name}
 awsRegionForDev={region, ex: 'us-east-1' }
 s3DomainForDev={domain including bucket name, ex: http://s3.amazonaws.com/sdk-project.pixlee.com/}
 ```
-4. Run the project on an Android device
+4. Click this icon below located at the top right in Android Studio.  
+<img src="doc/img/gradle_icon.png" width="200">
+
+![make](doc/img/gradle_example.png)
+
+
+5. Run the project on an Android device
 
 
 # Unit Test

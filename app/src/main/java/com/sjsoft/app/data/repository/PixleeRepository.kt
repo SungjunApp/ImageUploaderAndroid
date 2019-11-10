@@ -77,6 +77,8 @@ class PixleeRepository constructor(
                 true,
                 url = awsS3.getUrl(BuildConfig.AWS_S3_BUCKET_NAME, keyName).toExternalForm()
             )
+
+            Log.e("PixRepo", "PixRepo.end: ${uploadInfo.url}")
         }
 
         return uploadInfo
@@ -96,6 +98,7 @@ class PixleeRepository constructor(
             album.loadNextPageOfPhotos(object : PXLAlbum.RequestHandlers {
                 override fun DataLoadedHandler(photos: ArrayList<PXLPhoto>) {
                     remoteResult = photos
+                    Log.e("GalleryVM", "GalleryVM.remote.size: ${photos.size}")
                 }
 
                 override fun DataLoadFailedHandler(error: String?) {
