@@ -3,13 +3,19 @@ package com.pixlee.pixleesdk;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.VolleyError;
+import com.pixlee.pixleesdk.network.NetworkModule;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /***
  * Represents a Pixlee album. Constructs appropriate API calls to fetch the desired set of photos.
@@ -73,7 +79,7 @@ public class PXLAlbum implements RequestCallbacks {
      * @param error - error from volley
      */
     @Override
-    public void ErrorResponse(VolleyError error) {
+    public void ErrorResponse(Exception error) {
         if (handlers != null) {
             handlers.DataLoadFailedHandler(error.toString());
         }
@@ -118,27 +124,50 @@ public class PXLAlbum implements RequestCallbacks {
         }
         if (this.hasMore) {
             int desiredPage = this.lastPageLoaded + 1;
-            //Disable it because request with pages which failed cannot be called again
-            /*if (pagesLoading.get(desiredPage) != null && pagesLoading.get(desiredPage)) {
+            if (pagesLoading.get(desiredPage) != null && pagesLoading.get(desiredPage)) {
                 Log.d(TAG, String.format("page %s already loading", desiredPage));
                 return false;
-            }*/
+            }
             PXLClient pxlClient = PXLClient.getInstance(context);
-            String requestPath = String.format("albums/%s/photos", this.id);
             this.pagesLoading.put(desiredPage, true);
             this.handlers = handlers;
-            pxlClient.makeCall(requestPath, getRequestParams(desiredPage), this);
+
+            try {
+                pxlClient
+                        .getBasicrepo()
+                        .getPhotosWithID(
+                                this.id,
+                                PXLClient.apiKey,
+                                filterOptions != null ? filterOptions.toParamString() : null,
+                                sortOptions != null ? sortOptions.toParamString() : null,
+                                perPage,
+                                desiredPage
+                        ).enqueue(
+                        new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                try {
+                                    JSONObject json = new JSONObject(response.body());
+                                    JsonReceived(json);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                if (handlers != null) {
+                                    handlers.DataLoadFailedHandler(t.toString());
+                                }
+                            }
+                        }
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return true;
-    }
-
-    /**
-     * This is for not receiving cancelled calls
-     */
-    public void cancellAll() {
-        PXLClient pxlClient = PXLClient.getInstance(context);
-        pxlClient.cancellAll();
     }
 
 
@@ -168,7 +197,34 @@ public class PXLAlbum implements RequestCallbacks {
             e.printStackTrace();
         }
 
-        return pxlClient.makePostCall("media", body);
+        try {
+            pxlClient
+                    .getBasicrepo()
+                    .postMedia(
+                            PXLClient.apiKey,
+                            body
+                            )
+                    .enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            try {
+                                JSONObject json = new JSONObject(response.body());
+                                JsonReceived(json);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /***

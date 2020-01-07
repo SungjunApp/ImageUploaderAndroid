@@ -1,6 +1,7 @@
 package com.sjsoft.app.data.repository
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.event.ProgressListener
@@ -9,10 +10,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.amazonaws.services.s3.model.S3ObjectSummary
-import com.pixlee.pixleesdk.PXLAlbum
-import com.pixlee.pixleesdk.PXLAlbumSortOptions
-import com.pixlee.pixleesdk.PXLClient
-import com.pixlee.pixleesdk.PXLPhoto
+import com.pixlee.pixleesdk.*
 import com.sjsoft.app.BuildConfig
 import com.sjsoft.app.constant.AppConfig
 import com.sjsoft.app.data.PXLPhotoItem
@@ -35,7 +33,9 @@ interface PixleeDataSource {
 data class UploadInfo(val isComplete: Boolean, val url: String? = null)
 
 class PixleeRepository constructor(
+    private val context: Context,
     private val album: PXLAlbum,
+    private val analytics: PXLAnalytics,
     private val awsS3: AmazonS3
 ) : PixleeDataSource {
     override suspend fun getS3Images(): List<S3Item> {
@@ -94,7 +94,7 @@ class PixleeRepository constructor(
             var remoteResult: ArrayList<PXLPhoto>? = null
 
             options?.also { album.setSortOptions(it) }
-            album.cancellAll()
+            //album.cancellAll()
             album.loadNextPageOfPhotos(object : PXLAlbum.RequestHandlers {
                 override fun DataLoadedHandler(photos: ArrayList<PXLPhoto>) {
                     remoteResult = photos
@@ -124,8 +124,23 @@ class PixleeRepository constructor(
                     }
                     emit(result)
                     type = jobFinished
+
+                    //it.last().actionClicked("http://google.com",context)
+                    //it.last().openedLightbox(context)
+
                 }
             }
+            album.openedWidget()
+            //album.uploadImage("yosemite","sungjun.app@gmail.com", "jun", "https://a.cdn-hotels.com/gdcs/production180/d1647/96f1181c-6751-4d1b-926d-e39039f30d66.jpg", true);
+            analytics.addToCart("932720","100,000", 2, "원")
+            //analytics.addToCart("932720","100,000", 2)
+            val list = ArrayList<HashMap<String, Any>>()
+            val map = HashMap<String, Any>()
+            map["Name"] = "Jun"
+            map["Gender"] = "Male"
+            list.add(map)
+            //analytics.conversion(list, "30",3)
+            album.loadMore()
         }
 
 }

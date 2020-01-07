@@ -48,6 +48,7 @@ android {
                     appNameGradle: "Pixlee"
             ]
             buildConfigField "String", "PIXLEE_API_KEY", "\"" + PIXLEE_API_KEY + "\""
+            buildConfigField "String", "PIXLEE_SECRET_KEY", "\"" + PIXLEE_SECRET_KEY + "\""
             buildConfigField "String", "AWS_ACCESS_KEY", "\"" + AWS_ACCESS_KEY + "\""
             buildConfigField "String", "AWS_SECRET_KEY", "\"" + AWS_SECRET_KEY + "\""
             buildConfigField "String", "AWS_S3_BUCKET_NAME", "\"" + AWS_S3_BUCKET_NAME + "\""
@@ -61,6 +62,7 @@ android {
                     appNameGradle: "PixTest"
             ]
             buildConfigField "String", "PIXLEE_API_KEY", "\"" + PIXLEE_API_KEY+ "\""
+            buildConfigField "String", "PIXLEE_SECRET_KEY", "\"" + PIXLEE_SECRET_KEY + "\""
             buildConfigField "String", "AWS_ACCESS_KEY", "\"" + AWS_ACCESS_KEY_DEV + "\""
             buildConfigField "String", "AWS_SECRET_KEY", "\"" + AWS_SECRET_KEY_DEV + "\""
             buildConfigField "String", "AWS_S3_BUCKET_NAME", "\"" + AWS_S3_BUCKET_NAME_DEV + "\""

@@ -38,6 +38,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 ext {
 
     PIXLEE_API_KEY = keystoreProperties['pixleeAPIKey']
+    PIXLEE_SECRET_KEY = keystoreProperties['pixleeSecretKey']
 
     AWS_ACCESS_KEY = keystoreProperties['awsAccessKey']
     AWS_SECRET_KEY = keystoreProperties['awsSecretKey']

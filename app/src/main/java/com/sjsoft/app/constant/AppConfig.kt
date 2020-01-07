@@ -30,7 +30,7 @@ class AppConfig {
         const val enteringDelay = 400L
 
         //Pixlee
-        const val albumId = "5984962"
+        const val albumId = "12608528"
         const val LIST_VISIBLE_THRESHOLD = 5
         const val pixleeEmail = "sdk@pixleeteam.com"
         const val pixleeUserName = "SDK Project"
