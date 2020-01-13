@@ -12,6 +12,11 @@ import com.pixlee.pixleesdk.data.repository.AnalyticsDataSource;
 import com.pixlee.pixleesdk.data.repository.AnalyticsRepository;
 import com.pixlee.pixleesdk.data.repository.BasicDataSource;
 import com.pixlee.pixleesdk.data.repository.BasicRepository;
+import com.squareup.moshi.FromJson;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.ToJson;
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -19,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import kotlin.text.Charsets;
@@ -32,6 +38,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+/**
+ * This class generates Data Source classes that include Retrofit HTTP API interfaces.
+ * Retrofit Document: https://square.github.io/retrofit/
+ */
 public class NetworkModule {
     public static BasicDataSource generateBasicRepository() {
         return new BasicRepository(
@@ -62,9 +72,39 @@ public class NetworkModule {
 
     private static Gson provideGSon() {
         return new GsonBuilder()
-                //.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
     }
+
+    private static Moshi provideMoshi(){
+        Moshi moshi = new Moshi.Builder()
+                .add(new URLAdapter())  //String -> URL
+                .add(new Rfc3339DateJsonAdapter()) //string -> Date
+                .build();
+        return moshi;
+    }
+
+    static class URLAdapter {
+        @ToJson
+        String toJson(URL card) {
+            return card.toString();
+        }
+
+        @FromJson
+        URL fromJson(String card) {
+            /*if (card.length() != 2) throw new JsonDataException("Unknown card: " + card);
+
+            char rank = card.charAt(0);
+            switch (card.charAt(1)) {
+                case 'C': return new Card(rank, Suit.CLUBS);
+                case 'D': return new Card(rank, Suit.DIAMONDS);
+                case 'H': return new Card(rank, Suit.HEARTS);
+                case 'S': return new Card(rank, Suit.SPADES);
+                default: throw new JsonDataException("unknown suit: " + card);
+            }*/
+            return null;
+        }
+    }
+
 
     private static Retrofit provideRetrofit(String url, Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
@@ -113,10 +153,6 @@ public class NetworkModule {
 
         }
 
-        /*dispatcher = Dispatcher()
-        httpClientBuilder.dispatcher(dispatcher)*/
-        //ok.authenticator(new TokenAuthenticator());
-
         ok.addInterceptor(interceptor);
         return ok.build();
     }
@@ -138,31 +174,13 @@ public class NetworkModule {
                 builder.header("Accept", "application/json");
                 builder.header("Content-Type", "application/json");
                 builder.header("Accept-Encoding", "utf-8");
-                /*if("POST".equals(method)){
-                    try {
-                        String hmac = computeHmac(reqBody.replace("\\/", "/" ), PXLClient.secretKey);
-                        Log.e("pretty", "hmac: |" + hmac + "|");
-                        builder.header("Signature", hmac);
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (InvalidKeyException e) {
-                        e.printStackTrace();
-                    }
-                }*/
-
-                /*storage.getCookie()?.also { cookie ->
-                    builder.header("Authorization", "Bearer $cookie")
-
-                }
-                */
 
                 Response response = chain.proceed(builder.build());
                 ResponseBody body = response.body();
 
                 String bodyStr = body.string();
                 Log.e("pretty", "**http-num: " + response.code());
-                Log.e("pretty", "**http-body: "+ bodyStr);
-
+                Log.e("pretty", "**http-body: "+ body.string());
 
                 Response.Builder builder2 = response.newBuilder();
 
@@ -175,24 +193,4 @@ public class NetworkModule {
             }
         };
     }
-
-//    static public class TokenAuthenticator implements Authenticator {
-//        @Override
-//        public Request authenticate(Route route, Response response) {
-//            //HttpURLConnection.HTTP_UNAUTHORIZED
-//            Log.e("RequestMaker", "===http.status:" + response.code());
-//            Log.e("RequestMaker", "===http.url:" + response.request().url().toString());
-//
-//            Request request = response.request();
-//            Request.Builder builder = request.newBuilder();
-//            builder.header("Content-Type", "application/json")
-//                    .header("Accept", "application/json")
-//                    .header("Accept-Encoding", "utf-8")
-//                    .header("Signature", hmac)
-//                    .method(request.method(), request.body());
-//
-//            return builder.build();
-//        }
-//    }
-
 }

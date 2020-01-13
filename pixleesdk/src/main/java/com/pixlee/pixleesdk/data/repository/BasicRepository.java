@@ -17,6 +17,9 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
+/**
+ * This object loads data from and uploads data to the server using BasicAPI.java, a Retrofit HTTP API class.
+ */
 public class BasicRepository implements BasicDataSource {
     BasicAPI api;
 

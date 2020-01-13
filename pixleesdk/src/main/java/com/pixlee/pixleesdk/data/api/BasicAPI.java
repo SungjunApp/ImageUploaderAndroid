@@ -9,6 +9,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/**
+ * Restful API Access Object for basic APIs
+ * Retrofit Document: https://square.github.io/retrofit/
+ */
 public interface BasicAPI {
     @GET("albums/from_sku")
     Call<String> getPhotosWithSKU(

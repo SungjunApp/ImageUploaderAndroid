@@ -4,6 +4,9 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
+/**
+ * The entry point for accessing basic data.
+ */
 public interface BasicDataSource {
     Call<String> getPhotosWithSKU(
             String sku,

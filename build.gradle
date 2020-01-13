@@ -80,6 +80,7 @@ ext {
     //glide_transformations = "3.2.0"
 
     retrofit2 = "2.6.2"
+    moshi = "1.9.2"
     okhttp3 = "4.2.0"
 
     /**
