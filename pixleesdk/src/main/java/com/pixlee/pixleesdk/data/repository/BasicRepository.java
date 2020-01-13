@@ -5,7 +5,6 @@ import android.util.Base64;
 import com.pixlee.pixleesdk.PXLClient;
 import com.pixlee.pixleesdk.data.api.BasicAPI;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.InvalidKeyException;

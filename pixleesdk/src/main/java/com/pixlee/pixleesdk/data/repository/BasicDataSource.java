@@ -2,7 +2,6 @@ package com.pixlee.pixleesdk.data.repository;
 
 import org.json.JSONObject;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public interface BasicDataSource {

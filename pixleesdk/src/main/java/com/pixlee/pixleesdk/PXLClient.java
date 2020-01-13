@@ -2,21 +2,12 @@ package com.pixlee.pixleesdk;
 
 import android.content.Context;
 import android.provider.Settings.Secure;
-import android.util.Base64;
 
 import com.pixlee.pixleesdk.data.repository.AnalyticsDataSource;
 import com.pixlee.pixleesdk.data.repository.BasicDataSource;
 import com.pixlee.pixleesdk.network.NetworkModule;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -129,7 +120,7 @@ public class PXLClient {
                            new Callback<String>() {
                                @Override
                                public void onResponse(Call<String> call, Response<String> response) {
-                                   
+
                                }
 
                                @Override

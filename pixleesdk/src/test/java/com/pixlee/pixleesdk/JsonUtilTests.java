@@ -21,7 +21,7 @@ public class JsonUtilTests {
         result = JsonUtils.optDecodeString(field, json);
         Assert.assertEquals("", result);
 
-        json.put(field, "hello world");
+        json.put(field, "hello world %");
         result = JsonUtils.optDecodeString(field, json);
         Assert.assertEquals("hello world", result);
     }

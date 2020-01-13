@@ -3,16 +3,12 @@ package com.pixlee.pixleesdk;
 import android.content.Context;
 import android.util.Log;
 
-import com.pixlee.pixleesdk.network.NetworkModule;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

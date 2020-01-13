@@ -130,9 +130,9 @@ class PixleeRepository constructor(
 
                 }
             }
-            album.openedWidget()
+            //album.openedWidget()
             //album.uploadImage("yosemite","sungjun.app@gmail.com", "jun", "https://a.cdn-hotels.com/gdcs/production180/d1647/96f1181c-6751-4d1b-926d-e39039f30d66.jpg", true);
-            analytics.addToCart("932720","100,000", 2, "원")
+            //analytics.addToCart("932720","100,000", 2, "원")
             //analytics.addToCart("932720","100,000", 2)
             val list = ArrayList<HashMap<String, Any>>()
             val map = HashMap<String, Any>()
@@ -140,7 +140,7 @@ class PixleeRepository constructor(
             map["Gender"] = "Male"
             list.add(map)
             //analytics.conversion(list, "30",3)
-            album.loadMore()
+            //album.loadMore()
         }
 
 }
