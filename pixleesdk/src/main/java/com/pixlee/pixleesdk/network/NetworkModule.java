@@ -2,10 +2,12 @@ package com.pixlee.pixleesdk.network;
 
 import android.util.Log;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.orhanobut.logger.Logger;
 import com.pixlee.pixleesdk.BuildConfig;
+import com.pixlee.pixleesdk.annotation.FieldURL;
 import com.pixlee.pixleesdk.data.api.AnalyticsAPI;
 import com.pixlee.pixleesdk.data.api.BasicAPI;
 import com.pixlee.pixleesdk.data.repository.AnalyticsDataSource;
@@ -36,6 +38,7 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
@@ -72,6 +75,7 @@ public class NetworkModule {
 
     private static Gson provideGSon() {
         return new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DOTS)
                 .create();
     }
 
@@ -90,7 +94,7 @@ public class NetworkModule {
         }
 
         @FromJson
-        URL fromJson(String card) {
+        URL fromJson(@FieldURL String url) {
             /*if (card.length() != 2) throw new JsonDataException("Unknown card: " + card);
 
             char rank = card.charAt(0);
@@ -109,8 +113,9 @@ public class NetworkModule {
     private static Retrofit provideRetrofit(String url, Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(url)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(MoshiConverterFactory.create())
+                //.addConverterFactory(ScalarsConverterFactory.create())
+                //.addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
     }

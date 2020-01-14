@@ -3,6 +3,7 @@ package com.pixlee.pixleesdk.data.repository;
 import android.util.Base64;
 
 import com.pixlee.pixleesdk.PXLClient;
+import com.pixlee.pixleesdk.data.AlbumResult;
 import com.pixlee.pixleesdk.data.api.BasicAPI;
 
 import org.json.JSONObject;
@@ -29,7 +30,7 @@ public class BasicRepository implements BasicDataSource {
 
 
     @Override
-    public Call<String> getPhotosWithSKU(String sku, String api_key, String filters, String sort, int per_page, int page) {
+    public Call<AlbumResult> getPhotosWithSKU(String sku, String api_key, String filters, String sort, int per_page, int page) {
         return api.getPhotosWithSKU(sku, api_key, filters, sort, per_page, page);
     }
 
