@@ -91,18 +91,19 @@ class PixleeRepository constructor(
             val jobError = 1
             var type = jobWorking
 
-            var remoteResult: ArrayList<PXLPhoto>? = null
+            var remoteResult: List<PXLPhoto>? = null
 
             options?.also { album.setSortOptions(it) }
             //album.cancellAll()
             album.loadNextPageOfPhotos(object : PXLAlbum.RequestHandlers {
-                override fun DataLoadedHandler(photos: ArrayList<PXLPhoto>) {
+                override fun DataLoadedHandler(photos: List<PXLPhoto>) {
                     remoteResult = photos
                     Log.e("GalleryVM", "GalleryVM.remote.size: ${photos.size}")
                 }
 
                 override fun DataLoadFailedHandler(error: String?) {
                     type = jobError
+                    Log.e("GalleryVM", "GalleryVM.error: $error")
                     //error(error ?: "data load failed")
 
                 }

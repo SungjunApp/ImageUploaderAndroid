@@ -123,8 +123,8 @@ class GalleryFragment : BaseFragment(), Injectable {
                             .setPromptStateChangeListener { prompt, state ->
                                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
                                     viewModel.makeListTapped()
-                                    adapter.currentList[0]?.photo?.cdnLargeUrl?.toString()
-                                        ?.also { moveToViewer(it) }
+//                                    adapter.currentList[0]?.photo?.cdnLargeUrl?.toString()
+//                                        ?.also { moveToViewer(it) }
                                 }
                             }
                             .show()

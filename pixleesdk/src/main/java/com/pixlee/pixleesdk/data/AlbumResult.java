@@ -4,6 +4,7 @@ import com.pixlee.pixleesdk.PXLPhoto;
 import com.squareup.moshi.Json;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AlbumResult {
     @Json(name = "account_id")
@@ -24,6 +25,6 @@ public class AlbumResult {
     @Json(name = "next")
     public boolean next;
 
-    @Json(name = "photos")
-    public ArrayList<PXLPhoto> photos;
+    @Json(name = "data")
+    public List<PXLPhoto> photos;
 }

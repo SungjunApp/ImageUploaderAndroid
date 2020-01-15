@@ -42,9 +42,9 @@ class GalleryViewModel
                 pixlee.loadNextPageOfPhotos(options)
                     .collect {
                         it.forEach {
-                            it.photo?.products?.forEach {
-                                Log.e("Gallery","Gallery.list.title: ${it.title}")
-                            }
+//                            it.photo?.products?.forEach {
+//                                Log.e("Gallery","Gallery.list.title: ${it.title}")
+//                            }
                         }
                         listUI.value = ListUI.Data(it)
                     }

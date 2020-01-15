@@ -1,4 +1,4 @@
-package com.pixlee.pixleesdk.annotation;
+package com.pixlee.pixleesdk.network.annotation;
 
 import com.squareup.moshi.JsonQualifier;
 
