@@ -32,11 +32,6 @@ public class PXLAlbum extends PXLBaseAlbum{
     private static final String TAG = "PXLAlbum";
 
     /**
-     * This is 'album_id' in API response data
-     */
-    public String id;
-
-    /**
      * Constructor requires the album id and context, which will be passed along to the PXLClient
      * for volley configuration.
      *
@@ -46,7 +41,7 @@ public class PXLAlbum extends PXLBaseAlbum{
      */
     public PXLAlbum(String id, BasicDataSource basicRepo, AnalyticsDataSource analyticsRepo) {
         super(basicRepo, analyticsRepo);
-        this.id = id;
+        this.album_id = id;
     }
 
     /***
@@ -57,7 +52,7 @@ public class PXLAlbum extends PXLBaseAlbum{
      */
     @Override
     public boolean loadNextPageOfPhotos(final RequestHandlers handlers) {
-        if (id == null) {
+        if (album_id == null) {
             Log.w(TAG, "No album id specified");
             return false;
         }
@@ -70,7 +65,7 @@ public class PXLAlbum extends PXLBaseAlbum{
             this.pagesLoading.put(desiredPage, true);
             try {
                 basicRepo.getPhotosWithID(
-                        this.id,
+                        this.album_id,
                         PXLClient.apiKey,
                         filterOptions != null ? filterOptions.toParamString() : null,
                         sortOptions != null ? sortOptions.toParamString() : null,
@@ -79,13 +74,7 @@ public class PXLAlbum extends PXLBaseAlbum{
                 ).enqueue(new Callback<PhotoResult>() {
                     @Override
                     public void onResponse(Call<PhotoResult> call, Response<PhotoResult> response) {
-                        PhotoResult result = response.body();
-                        Log.e("retrofit result", "retrofit result:" + result.total);
-                        Log.e("retrofit result", "retrofit result:" + result.photos.size());
-                        for (PXLPhoto photo : result.photos) {
-                            Log.e("retrofit result", "retrofit cdnSmallUrl:" + photo.cdnMediumUrl);
-                        }
-                        setData(result, handlers);
+                        setData(response.body(), handlers);
                     }
 
                     @Override
@@ -101,34 +90,6 @@ public class PXLAlbum extends PXLBaseAlbum{
         }
 
         return true;
-    }
-
-    /**
-     * save API response data and fire RequestHandlers.DataLoadedHandler(PXLPhoto) as a callback
-     * @param result API response data
-     * @param handlers A callback
-     */
-    private void setData(PhotoResult result, RequestHandlers handlers) {
-        page = result.page;
-        perPage = result.perPage;
-        hasMore = result.next;
-        if (id == null) {
-            id = String.valueOf(result.albumId);
-        }
-        //add placeholders for photos if they haven't been loaded yet
-        if (photos.size() < (page - 1) * perPage) {
-            for (int i = photos.size(); i < (page - 1) * perPage; i++) {
-                photos.add(null);
-            }
-        }
-
-        photos.addAll(result.photos);
-        lastPageLoaded = Math.max(page, lastPageLoaded);
-
-        //handlers set when making the original 'loadNextPageOfPhotos' call
-        if (handlers != null) {
-            handlers.DataLoadedHandler(photos);
-        }
     }
 
     /***
@@ -157,7 +118,7 @@ public class PXLAlbum extends PXLBaseAlbum{
         JSONObject body = new JSONObject();
 
         try {
-            body.put("album_id", Integer.parseInt(this.id));
+            body.put("album_id", Integer.parseInt(this.album_id));
             body.put("title", title);
             body.put("email", email);
             body.put("username", username);
@@ -175,8 +136,7 @@ public class PXLAlbum extends PXLBaseAlbum{
             ).enqueue(new Callback<PhotoResult>() {
                 @Override
                 public void onResponse(Call<PhotoResult> call, Response<PhotoResult> response) {
-                    PhotoResult result = response.body();
-                    setData(result, handlers);
+                    setData(response.body(), handlers);
                 }
 
                 @Override
@@ -212,7 +172,7 @@ public class PXLAlbum extends PXLBaseAlbum{
         }
 
         try {
-            body.put("album_id", Integer.parseInt(this.id));
+            body.put("album_id", Integer.parseInt(this.album_id));
             body.put("per_page", this.perPage);
             body.put("page", this.page);
             body.put("photos", stringBuilder.toString());
@@ -226,7 +186,7 @@ public class PXLAlbum extends PXLBaseAlbum{
     }
 
     public boolean loadMore() {
-        if (id == null) {
+        if (album_id == null) {
             Log.w(TAG, "missing album id");
             return false;
         }
@@ -249,7 +209,7 @@ public class PXLAlbum extends PXLBaseAlbum{
         }
 
         try {
-            body.put("album_id", Integer.parseInt(this.id));
+            body.put("album_id", Integer.parseInt(this.album_id));
             body.put("per_page", this.perPage);
             body.put("page", this.page);
             body.put("photos", stringBuilder.toString());
