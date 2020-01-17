@@ -1,26 +1,25 @@
 package com.sjsoft.app.data.repository
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
-import com.amazonaws.auth.BasicAWSCredentials
-import com.amazonaws.event.ProgressListener
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
-import com.amazonaws.services.s3.model.S3ObjectSummary
-import com.pixlee.pixleesdk.*
+import com.pixlee.pixleesdk.PXLAlbumSortOptions
+import com.pixlee.pixleesdk.PXLAnalytics
+import com.pixlee.pixleesdk.PXLBaseAlbum
+import com.pixlee.pixleesdk.PXLPhoto
 import com.sjsoft.app.BuildConfig
 import com.sjsoft.app.constant.AppConfig
 import com.sjsoft.app.data.PXLPhotoItem
 import com.sjsoft.app.data.S3Item
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -33,8 +32,7 @@ interface PixleeDataSource {
 data class UploadInfo(val isComplete: Boolean, val url: String? = null)
 
 class PixleeRepository constructor(
-    private val context: Context,
-    private val album: PXLAlbum,
+    private val album: PXLBaseAlbum,
     private val analytics: PXLAnalytics,
     private val awsS3: AmazonS3
 ) : PixleeDataSource {
@@ -95,7 +93,7 @@ class PixleeRepository constructor(
 
             options?.also { album.setSortOptions(it) }
             //album.cancellAll()
-            album.loadNextPageOfPhotos(object : PXLAlbum.RequestHandlers {
+            album.loadNextPageOfPhotos(object : PXLBaseAlbum.RequestHandlers {
                 override fun DataLoadedHandler(photos: List<PXLPhoto>) {
                     remoteResult = photos
                     Log.e("GalleryVM", "GalleryVM.remote.size: ${photos.size}")
