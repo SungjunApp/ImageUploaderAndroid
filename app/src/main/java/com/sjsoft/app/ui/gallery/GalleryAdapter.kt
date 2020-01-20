@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pixlee.pixleesdk.PXLPhotoSize
 import com.sjsoft.app.GlideApp
 import com.sjsoft.app.R
 import com.sjsoft.app.constant.AppConfig
@@ -30,10 +31,11 @@ class GalleryAdapter(
     }
 
     override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
-        val imageUrl = getItem(position)?.photo?.cdnMediumUrl ?.toString()
+        val imageUrl = getItem(position)?.photo?.getUrlForSize(PXLPhotoSize.MEDIUM)?.toString()
+
         holder.bind(imageUrl, false, marginInfo)
         holder.itemView.setSafeOnClickListener {
-            getItem(position)?.photo?.cdnLargeUrl?.toString()?.also { clickListener(it) }
+            getItem(position)?.photo?.getUrlForSize(PXLPhotoSize.BIG)?.toString()?.also { clickListener(it) }
         }
     }
 

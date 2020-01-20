@@ -23,8 +23,8 @@ class PixleeModule {
         so.descending = true
 
 
-//        val album = PXLAlbum(AppConfig.albumId, PXLClient.getInstance(context).basicrepo, PXLClient.getInstance(context).analyticsRepo)
-        val album = PXLPdpAlbum("932720", PXLClient.getInstance(context).basicrepo, PXLClient.getInstance(context).analyticsRepo)
+        val album = PXLAlbum(AppConfig.albumId, PXLClient.getInstance(context).basicrepo, PXLClient.getInstance(context).analyticsRepo)
+//        val album = PXLPdpAlbum("932720", PXLClient.getInstance(context).basicrepo, PXLClient.getInstance(context).analyticsRepo)
         album.setPerPage(40)
         album.setFilterOptions(fo)
         album.setSortOptions(so)

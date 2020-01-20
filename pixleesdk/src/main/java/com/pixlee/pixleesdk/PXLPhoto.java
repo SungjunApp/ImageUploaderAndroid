@@ -1,5 +1,6 @@
 package com.pixlee.pixleesdk;
 
+import com.pixlee.pixleesdk.data.CDNPhotos;
 import com.pixlee.pixleesdk.network.annotation.FieldDate;
 import com.pixlee.pixleesdk.network.annotation.FieldURL;
 import com.pixlee.pixleesdk.network.annotation.NullableDouble;
@@ -53,9 +54,15 @@ public class PXLPhoto {
     @Json(name = "connected_user_id")
     public int connectedUserId;
 
+    /**
+     * Media from a list of sources: ["instagram", "twitter", "facebook", "api", "desktop", "email"]
+     */
     @Json(name = "source")
     public String source;
 
+    /**
+     * Select from ["video", "image"]
+     */
     @Json(name = "content_type")
     public String contentType;
 
@@ -156,26 +163,8 @@ public class PXLPhoto {
     @Json(name = "products")
     public List<PXLProduct> products;
 
-    //@FieldURL
-    @Json(name = "small_url")
-    //@Nested(keys = {"pixlee_cdn_photos", "small_url"})
-    public String cdnSmallUrl;
-
-    //@FieldURL
     @Json(name = "pixlee_cdn_photos")
-    @Wrapped(path = {"medium_url"})
-    public String cdnMediumUrl;
-
-    //@FieldURL
-    @Json(name = "large_url")
-//    @Nested(keys = {"pixlee_cdn_photos","large_url"})
-    public String cdnLargeUrl;
-
-    //@FieldURL
-    @Json(name = "original_url")
-//    @Nested(keys = {"pixlee_cdn_photos","original_url"})
-    public String cdnOriginalUrl;
-
+    public CDNPhotos cdnPhotos;
 
     @Override
     public String toString() {
@@ -183,11 +172,28 @@ public class PXLPhoto {
     }
 
     /***
+     * Doc for ContentType: https://developers.pixlee.com/reference#get-information-about-an-album
+     *
      * Returns the appropriate url for the desired photo size
      * @param size
-     * @return
+     * @return a image url:    Note!! this url, especially not approved PXLPhoto that has 'source' of'api', 'desktop' or 'email' returns null-URL.
+     *                         Therefore, please have a null-check before use it
      */
     public URL getUrlForSize(PXLPhotoSize size) {
+        if ("video".equals(source)) {
+            //video
+            return getFromResized(size);
+        } else {
+            //image
+            if (approved) {
+                return getFromCDN(size);
+            } else {
+                return getFromResized(size);
+            }
+        }
+    }
+
+    private URL getFromResized(PXLPhotoSize size) {
         switch (size) {
             case THUMBNAIL:
                 return this.thumbnailUrl;
@@ -199,6 +205,20 @@ public class PXLPhoto {
                 return null;
         }
     }
+
+    private URL getFromCDN(PXLPhotoSize size) {
+        switch (size) {
+            case THUMBNAIL:
+                return cdnPhotos.smallUrl;
+            case MEDIUM:
+                return cdnPhotos.mediumUrl;
+            case BIG:
+                return cdnPhotos.largeUrl;
+            default:
+                return null;
+        }
+    }
+
 
     /***
      * Returns a resource ID to an image representing the current photo's source
