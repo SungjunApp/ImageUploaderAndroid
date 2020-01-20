@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pixlee.pixleesdk.PXLPhoto
 import com.pixlee.pixleesdk.PXLPhotoSize
 import com.sjsoft.app.GlideApp
 import com.sjsoft.app.R
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.item_gallery.*
 class GalleryAdapter(
     val context: Context,
     private val marginInfo: MarginInfo,
-    val clickListener: (String) -> Unit
+    val clickListener: (PXLPhoto) -> Unit
 ) :
     ListAdapter<PXLPhotoItem, GridViewHolder>(REPO_COMPARATOR) {
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): GridViewHolder {
@@ -35,7 +36,9 @@ class GalleryAdapter(
 
         holder.bind(imageUrl, false, marginInfo)
         holder.itemView.setSafeOnClickListener {
-            getItem(position)?.photo?.getUrlForSize(PXLPhotoSize.BIG)?.toString()?.also { clickListener(it) }
+            getItem(position)?.photo?.also {
+                clickListener(it)
+            }
         }
     }
 

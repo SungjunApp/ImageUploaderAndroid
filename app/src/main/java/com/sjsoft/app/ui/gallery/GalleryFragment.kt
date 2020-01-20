@@ -13,11 +13,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pixlee.pixleesdk.PXLAlbumSortType
+import com.pixlee.pixleesdk.PXLPhoto
 import com.sjsoft.app.R
+import com.sjsoft.app.data.S3Item
 import com.sjsoft.app.di.Injectable
 import com.sjsoft.app.ui.BaseFragment
 import com.sjsoft.app.ui.holders.MarginInfo
 import com.sjsoft.app.ui.viewer.ImageViewerFragment
+import com.sjsoft.app.ui.viewer.VideoViewerFragment
 import com.sjsoft.app.util.*
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.bt_more
@@ -52,8 +55,14 @@ class GalleryFragment : BaseFragment(), Injectable {
         }
     }
 
-    fun moveToViewer(image: String) {
-        addFragmentToActivity(ImageViewerFragment.getInstance(image))
+    fun moveToViewer(image: PXLPhoto) {
+        image.sourceUrl?.toString()?.also {
+            if(image.isVideo){
+                addFragmentToActivity(VideoViewerFragment.getInstance(it))
+            }else{
+                addFragmentToActivity(ImageViewerFragment.getInstance(it))
+            }
+        }
     }
 
     internal var gridLayoutManager: GridLayoutManager? = null

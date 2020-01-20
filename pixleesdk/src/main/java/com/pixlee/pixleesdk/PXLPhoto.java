@@ -186,7 +186,7 @@ public class PXLPhoto {
      *                         Therefore, please have a null-check before use it
      */
     public URL getUrlForSize(PXLPhotoSize size) {
-        if ("video".equals(contentType)) {
+        if (isVideo()) {
             //video
             return getFromResized(size);
         } else {
@@ -213,7 +213,7 @@ public class PXLPhoto {
     }
 
     private URL getFromCDN(PXLPhotoSize size) {
-        if(cdnPhotos==null)
+        if (cdnPhotos == null)
             return null;
 
         switch (size) {
@@ -226,6 +226,10 @@ public class PXLPhoto {
             default:
                 return null;
         }
+    }
+
+    public boolean isVideo() {
+        return "video".equals(contentType);
     }
 
 
