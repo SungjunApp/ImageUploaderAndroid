@@ -172,15 +172,21 @@ public class PXLPhoto {
     }
 
     /***
-     * Doc for ContentType: https://developers.pixlee.com/reference#get-information-about-an-album
-     *
      * Returns the appropriate url for the desired photo size
+     *
+     * Documentation for ContentType: https://developers.pixlee.com/reference#get-information-about-an-album
      * @param size
-     * @return a image url:    Note!! this url, especially not approved PXLPhoto that has 'source' of'api', 'desktop' or 'email' returns null-URL.
+     * @return a image url:    Note!! Under these conditions,
+     *                          - PXLPhoto.contentType is "photo"
+     *                          - and its PXLPhoto.approved is false
+     *                         this method will return
+     *                           - URLs with PXLPhoto.source as "instagram", "twitter" or "facebook".
+     *                           - or NULL with PXLPhoto.source as "api", "desktop" or "email".
+     *
      *                         Therefore, please have a null-check before use it
      */
     public URL getUrlForSize(PXLPhotoSize size) {
-        if ("video".equals(source)) {
+        if ("video".equals(contentType)) {
             //video
             return getFromResized(size);
         } else {
@@ -207,6 +213,9 @@ public class PXLPhoto {
     }
 
     private URL getFromCDN(PXLPhotoSize size) {
+        if(cdnPhotos==null)
+            return null;
+
         switch (size) {
             case THUMBNAIL:
                 return cdnPhotos.smallUrl;
