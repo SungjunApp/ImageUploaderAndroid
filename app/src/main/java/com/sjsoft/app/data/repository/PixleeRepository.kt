@@ -5,10 +5,7 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
-import com.pixlee.pixleesdk.PXLAlbumSortOptions
-import com.pixlee.pixleesdk.PXLAnalytics
-import com.pixlee.pixleesdk.PXLBaseAlbum
-import com.pixlee.pixleesdk.PXLPhoto
+import com.pixlee.pixleesdk.*
 import com.sjsoft.app.BuildConfig
 import com.sjsoft.app.constant.AppConfig
 import com.sjsoft.app.data.PXLPhotoItem
@@ -124,13 +121,22 @@ class PixleeRepository constructor(
                     emit(result)
                     type = jobFinished
 
-                    //it.last().actionClicked("http://google.com",context)
+                    album.getPhotoWithId(result.first().photo, null)
+
+                    //album.actionClicked(it.last(), "http://google.com")
                     //it.last().openedLightbox(context)
 
                 }
             }
-            //album.openedWidget()
-            //album.uploadImage("yosemite","sungjun.app@gmail.com", "jun", "https://a.cdn-hotels.com/gdcs/production180/d1647/96f1181c-6751-4d1b-926d-e39039f30d66.jpg", true);
+//            album.openedWidget()
+            /*album.uploadImage("seoulTower",
+                "sungjun.app@gmail.com",
+                "jun",
+                "https://www.dragonhilllodge.com/application/files/3215/5479/9457/fall_DHL5.jpg",
+                true,
+                null
+            )*/
+
             //analytics.addToCart("932720","100,000", 2, "원")
             //analytics.addToCart("932720","100,000", 2)
             val list = ArrayList<HashMap<String, Any>>()
@@ -139,7 +145,8 @@ class PixleeRepository constructor(
             map["Gender"] = "Male"
             list.add(map)
             //analytics.conversion(list, "30",3)
-            //album.loadMore()
+            album.loadMore()
+
         }
 
 }

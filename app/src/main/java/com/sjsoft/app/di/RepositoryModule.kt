@@ -2,8 +2,10 @@ package com.sjsoft.app.di
 
 import android.content.Context
 import com.amazonaws.services.s3.AmazonS3
+import com.pixlee.pixleesdk.PXLAlbum
 import com.pixlee.pixleesdk.PXLAnalytics
 import com.pixlee.pixleesdk.PXLBaseAlbum
+import com.pixlee.pixleesdk.PXLPdpAlbum
 import com.sjsoft.app.data.repository.PixleeDataSource
 import com.sjsoft.app.data.repository.PixleeRepository
 import com.sjsoft.app.data.repository.PreferenceDataSource

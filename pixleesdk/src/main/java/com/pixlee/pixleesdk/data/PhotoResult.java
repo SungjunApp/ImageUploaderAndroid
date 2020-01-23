@@ -6,7 +6,7 @@ import com.squareup.moshi.Json;
 import java.util.List;
 
 public class PhotoResult {
-    @Json(name = "account_id")
+    @Json(name = "accountId")
     public int accountId;
 
     @Json(name = "album_id")
