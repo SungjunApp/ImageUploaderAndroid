@@ -39,10 +39,10 @@ public class PXLAlbum implements RequestCallbacks {
 
     /**
      * This deals with network responses
-     * if http code is between 200 and 299, it returns the body
-     * if not, it returns the error body
+     * when HTTP-code is in between 200 and 299, this method returns the body
+     * when HTTP-code is not in between 200 and 299, this method returns the error body
      *
-     * @param response
+     * @param response Retrofit's string body
      */
     protected void processResponse(Response<String> response) {
         try {

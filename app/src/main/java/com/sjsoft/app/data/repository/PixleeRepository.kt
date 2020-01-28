@@ -1,5 +1,6 @@
 package com.sjsoft.app.data.repository
 
+import android.content.Context
 import android.util.Log
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.CannedAccessControlList
@@ -29,6 +30,7 @@ interface PixleeDataSource {
 data class UploadInfo(val isComplete: Boolean, val url: String? = null)
 
 class PixleeRepository constructor(
+    private val context: Context,
     private val album: PXLPdpAlbum,
     private val analytics: PXLAnalytics,
     private val awsS3: AmazonS3
@@ -119,6 +121,19 @@ class PixleeRepository constructor(
                     }
                     emit(result)
                     type = jobFinished
+
+
+                    result.first().photo?.albumPhotoId?.also{
+                        PXLPhoto.getPhotoWithId(context, it, object: PXLPhoto.PhotoLoadHandlers {
+                            override fun photoLoaded(photo: PXLPhoto?) {
+                                Log.d("PixleeRepo", "PixleeRepo.photo:" + photo)
+                            }
+
+                            override fun photoLoadFailed(error: String?) {
+                                Log.d("PixleeRepo", "error:" + error)
+                            }
+                        })
+                    }
 
                     //album.getPhotoWithId(result.first().photo, null)
 

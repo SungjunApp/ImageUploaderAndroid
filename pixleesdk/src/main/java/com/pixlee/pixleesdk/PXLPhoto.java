@@ -83,18 +83,23 @@ public class PXLPhoto {
 
     /**
      * This deals with network responses
-     * if http code is between 200 and 299, it returns the body
-     * if not, it returns the error body
+     * when HTTP-code is in between 200 and 299, this method returns the body
+     * when HTTP-code is not in between 200 and 299, this method returns the error body
      *
-     * @param response
+     * @param response Retrofit's string body
      */
-    protected void processResponse(Response<String> response, PhotoLoadHandlers callback) {
+    protected static void processResponse(Response<String> response, PhotoLoadHandlers callback) {
         try {
             String result = response.body();
             if (response.isSuccessful()) {
                 JSONObject json = new JSONObject(result);
-                if (callback != null) {
-                    callback.photoLoaded(PXLPhoto.fromJsonObj(data));
+                JSONObject data = json.optJSONObject("data");
+                if(data!=null) {
+                    if (callback != null) {
+                        callback.photoLoaded(PXLPhoto.fromJsonObj(data));
+                    }
+                }else{
+                    Log.e(TAG, "no data from successful api call");
                 }
             } else {
                 ResponseBody errorBody = response.errorBody();
@@ -103,7 +108,7 @@ public class PXLPhoto {
                         callback.photoLoadFailed(errorBody.toString());
                     }
                 } else {
-                    Log.e(TAG, "no response data");
+                    Log.e(TAG, "no data from failed api call");
                 }
             }
 
@@ -153,23 +158,7 @@ public class PXLPhoto {
                             new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
-                                    try {
-                                        if(response.isSuccessful()){
-                                            JSONObject json = new JSONObject(response.body());
-                                            JSONObject data = json.optJSONObject("data");
-                                            if (data != null) {
-                                                if (callback != null) {
-                                                    callback.photoLoaded(PXLPhoto.fromJsonObj(data));
-                                                }
-                                                return;
-                                            }
-                                        }
-
-                                        Log.e(TAG, "no data from successful api call");
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                    processResponse(response, callback);
                                 }
 
                                 @Override
@@ -201,19 +190,7 @@ public class PXLPhoto {
                             new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
-                                    try {
-                                        JSONObject json = new JSONObject(response.body());
-                                        JSONObject data = json.optJSONObject("data");
-                                        if (data == null) {
-                                            Log.e(TAG, "no data from successful api call");
-                                        } else {
-                                            if (callback != null) {
-                                                callback.photoLoaded(PXLPhoto.fromJsonObj(data));
-                                            }
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                    processResponse(response, callback);
                                 }
 
                                 @Override

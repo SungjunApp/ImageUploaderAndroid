@@ -16,8 +16,8 @@ import javax.inject.Singleton
 @Module
 class RepositoryModule {
     @Provides
-    fun providePixleeRepository(album: PXLPdpAlbum, analytics: PXLAnalytics, awsS3: AmazonS3): PixleeDataSource {
-        return PixleeRepository(album, analytics, awsS3)
+    fun providePixleeRepository(context:Context, album: PXLPdpAlbum, analytics: PXLAnalytics, awsS3: AmazonS3): PixleeDataSource {
+        return PixleeRepository(context, album, analytics, awsS3)
     }
 
     @Singleton
