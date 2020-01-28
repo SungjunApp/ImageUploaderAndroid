@@ -20,7 +20,8 @@ class PixleeModule{
         so.sortType = PXLAlbumSortType.RECENCY
         so.descending = true
 
-        val album = PXLAlbum(AppConfig.albumId, context)
+        //val album = PXLAlbum(AppConfig.albumId, context)
+        val album = PXLPdpAlbum("aaaa", context)
         album.setPerPage(40)
         album.setFilterOptions(fo)
         album.setSortOptions(so)

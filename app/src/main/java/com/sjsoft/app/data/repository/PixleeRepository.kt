@@ -9,10 +9,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.amazonaws.services.s3.model.S3ObjectSummary
-import com.pixlee.pixleesdk.PXLAlbum
-import com.pixlee.pixleesdk.PXLAlbumSortOptions
-import com.pixlee.pixleesdk.PXLClient
-import com.pixlee.pixleesdk.PXLPhoto
+import com.pixlee.pixleesdk.*
 import com.sjsoft.app.BuildConfig
 import com.sjsoft.app.constant.AppConfig
 import com.sjsoft.app.data.PXLPhotoItem
@@ -35,7 +32,7 @@ interface PixleeDataSource {
 data class UploadInfo(val isComplete: Boolean, val url: String? = null)
 
 class PixleeRepository constructor(
-    private val album: PXLAlbum,
+    private val album: PXLPdpAlbum,
     private val awsS3: AmazonS3
 ) : PixleeDataSource {
     override suspend fun getS3Images(): List<S3Item> {

@@ -1,10 +1,12 @@
 package com.sjsoft.app.di
 
 import android.content.Context
-import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3
-import com.pixlee.pixleesdk.PXLAlbum
-import com.sjsoft.app.data.repository.*
+import com.pixlee.pixleesdk.PXLPdpAlbum
+import com.sjsoft.app.data.repository.PixleeDataSource
+import com.sjsoft.app.data.repository.PixleeRepository
+import com.sjsoft.app.data.repository.PreferenceDataSource
+import com.sjsoft.app.data.repository.PreferenceRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -13,7 +15,7 @@ import javax.inject.Singleton
 @Module
 class RepositoryModule {
     @Provides
-    fun providePixleeRepository(album: PXLAlbum, awsS3: AmazonS3): PixleeDataSource {
+    fun providePixleeRepository(album: PXLPdpAlbum, awsS3: AmazonS3): PixleeDataSource {
         return PixleeRepository(album, awsS3)
     }
 
