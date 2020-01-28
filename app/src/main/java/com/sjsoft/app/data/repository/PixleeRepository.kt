@@ -29,7 +29,7 @@ interface PixleeDataSource {
 data class UploadInfo(val isComplete: Boolean, val url: String? = null)
 
 class PixleeRepository constructor(
-    private val album: PXLBaseAlbum,
+    private val album: PXLPdpAlbum,
     private val analytics: PXLAnalytics,
     private val awsS3: AmazonS3
 ) : PixleeDataSource {
@@ -90,10 +90,9 @@ class PixleeRepository constructor(
 
             options?.also { album.setSortOptions(it) }
             //album.cancellAll()
-            album.loadNextPageOfPhotos(object : PXLBaseAlbum.RequestHandlers {
-                override fun DataLoadedHandler(photos: List<PXLPhoto>) {
+            album.loadNextPageOfPhotos(object : PXLAlbum.RequestHandlers {
+                override fun DataLoadedHandler(photos: java.util.ArrayList<PXLPhoto>?) {
                     remoteResult = photos
-                    Log.e("GalleryVM", "GalleryVM.remote.size: ${photos.size}")
                 }
 
                 override fun DataLoadFailedHandler(error: String?) {
@@ -121,7 +120,7 @@ class PixleeRepository constructor(
                     emit(result)
                     type = jobFinished
 
-                    album.getPhotoWithId(result.first().photo, null)
+                    //album.getPhotoWithId(result.first().photo, null)
 
                     //album.actionClicked(it.last(), "http://google.com")
                     //it.last().openedLightbox(context)

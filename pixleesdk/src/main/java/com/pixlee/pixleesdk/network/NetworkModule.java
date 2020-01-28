@@ -2,7 +2,6 @@ package com.pixlee.pixleesdk.network;
 
 import android.util.Log;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.orhanobut.logger.Logger;
@@ -13,11 +12,6 @@ import com.pixlee.pixleesdk.data.repository.AnalyticsDataSource;
 import com.pixlee.pixleesdk.data.repository.AnalyticsRepository;
 import com.pixlee.pixleesdk.data.repository.BasicDataSource;
 import com.pixlee.pixleesdk.data.repository.BasicRepository;
-import com.pixlee.pixleesdk.network.adaptor.DateAdapter;
-import com.pixlee.pixleesdk.network.adaptor.PrimitiveAdapter;
-import com.pixlee.pixleesdk.network.adaptor.URLAdapter;
-import com.serjltt.moshi.adapters.Wrapped;
-import com.squareup.moshi.Moshi;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -35,12 +29,9 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.moshi.MoshiConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-/**
- * This class generates Data Source classes that include Retrofit HTTP API interfaces.
- * Retrofit Document: https://square.github.io/retrofit/
- */
 public class NetworkModule {
     public static BasicDataSource generateBasicRepository() {
         return new BasicRepository(
@@ -71,26 +62,15 @@ public class NetworkModule {
 
     private static Gson provideGSon() {
         return new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DOTS)
+                //.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
-    }
-
-    private static Moshi provideMoshi(){
-        return new Moshi.Builder()
-//                .add(NestingJsonAdapter.FACTORY)
-                .add(Wrapped.ADAPTER_FACTORY)
-                .add(new PrimitiveAdapter()) //null -> a specified default value, same as the return value of JSONObject.opt{PrimitiveType}(...)
-                .add(new URLAdapter())  //String -> URL
-                .add(new DateAdapter()) //string -> Date
-                .build();
     }
 
     private static Retrofit provideRetrofit(String url, Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(url)
-                .addConverterFactory(MoshiConverterFactory.create(provideMoshi()))
-                //.addConverterFactory(ScalarsConverterFactory.create())
-                //.addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
     }
@@ -133,7 +113,11 @@ public class NetworkModule {
 
         }
 
-        //ok.addInterceptor(interceptor);
+        /*dispatcher = Dispatcher()
+        httpClientBuilder.dispatcher(dispatcher)*/
+        //ok.authenticator(new TokenAuthenticator());
+
+        ok.addInterceptor(interceptor);
         return ok.build();
     }
 
@@ -145,22 +129,40 @@ public class NetworkModule {
             public Response intercept(@NotNull Chain chain) throws IOException {
 
                 Request original = chain.request();
-                Log.d("pretty", "Interceptor.url.host: " + original.url().host());
-                Log.d("pretty", "Interceptor.url.url: " + original.url());
-                Log.d("pretty", "Interceptor.url.method: " + original.method());
+                Log.e("pretty", "Interceptor.url.host: " + original.url().host());
+                Log.e("pretty", "Interceptor.url.url: " + original.url());
+                Log.e("pretty", "Interceptor.url.method: " + original.method());
 
                 Request.Builder builder = original.newBuilder();
 
                 builder.header("Accept", "application/json");
                 builder.header("Content-Type", "application/json");
                 builder.header("Accept-Encoding", "utf-8");
+                /*if("POST".equals(method)){
+                    try {
+                        String hmac = computeHmac(reqBody.replace("\\/", "/" ), PXLClient.secretKey);
+                        Log.e("pretty", "hmac: |" + hmac + "|");
+                        builder.header("Signature", hmac);
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (InvalidKeyException e) {
+                        e.printStackTrace();
+                    }
+                }*/
+
+                /*storage.getCookie()?.also { cookie ->
+                    builder.header("Authorization", "Bearer $cookie")
+
+                }
+                */
 
                 Response response = chain.proceed(builder.build());
                 ResponseBody body = response.body();
 
                 String bodyStr = body.string();
-                Log.d("pretty", "**http-num: " + response.code());
-                Log.d("pretty", "**http-body: "+ body.string());
+                Log.e("pretty", "**http-num: " + response.code());
+                Log.e("pretty", "**http-body: "+ bodyStr);
+
 
                 Response.Builder builder2 = response.newBuilder();
 
@@ -173,4 +175,24 @@ public class NetworkModule {
             }
         };
     }
+
+//    static public class TokenAuthenticator implements Authenticator {
+//        @Override
+//        public Request authenticate(Route route, Response response) {
+//            //HttpURLConnection.HTTP_UNAUTHORIZED
+//            Log.e("RequestMaker", "===http.status:" + response.code());
+//            Log.e("RequestMaker", "===http.url:" + response.request().url().toString());
+//
+//            Request request = response.request();
+//            Request.Builder builder = request.newBuilder();
+//            builder.header("Content-Type", "application/json")
+//                    .header("Accept", "application/json")
+//                    .header("Accept-Encoding", "utf-8")
+//                    .header("Signature", hmac)
+//                    .method(request.method(), request.body());
+//
+//            return builder.build();
+//        }
+//    }
+
 }

@@ -11,7 +11,7 @@ import dagger.Provides
 class PixleeModule {
     @Provides
     //@Singleton
-    fun getPXLAlbum(context: Context): PXLBaseAlbum {
+    fun getPXLAlbum(context: Context): PXLPdpAlbum {
         PXLClient.initialize(BuildConfig.PIXLEE_API_KEY, BuildConfig.PIXLEE_SECRET_KEY)
 
         val fo = PXLAlbumFilterOptions()
@@ -24,19 +24,19 @@ class PixleeModule {
 
 
 //        val album = PXLAlbum(AppConfig.albumId, PXLClient.getInstance(context).basicrepo, PXLClient.getInstance(context).analyticsRepo)
-        val album = PXLPdpAlbum("932720", PXLClient.getInstance(context).basicrepo, PXLClient.getInstance(context).analyticsRepo)
+        val album = PXLPdpAlbum("932720", context)
         album.setPerPage(40)
         album.setFilterOptions(fo)
         album.setSortOptions(so)
 
-        return album as PXLBaseAlbum
+        return album as PXLPdpAlbum
     }
 
     @Provides
     //@Singleton
     fun getPXLAnalytics(context: Context): PXLAnalytics {
         PXLClient.initialize(BuildConfig.PIXLEE_API_KEY, BuildConfig.PIXLEE_SECRET_KEY)
-        val analytics = PXLAnalytics(PXLClient.getInstance(context).analyticsRepo)
+        val analytics = PXLAnalytics(context)
         return analytics
     }
 

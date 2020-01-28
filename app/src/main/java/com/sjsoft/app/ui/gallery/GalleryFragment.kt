@@ -57,11 +57,11 @@ class GalleryFragment : BaseFragment(), Injectable {
 
     fun moveToViewer(image: PXLPhoto) {
         image.sourceUrl?.toString()?.also {
-            if(image.isVideo){
-                addFragmentToActivity(VideoViewerFragment.getInstance(it))
-            }else{
-                addFragmentToActivity(ImageViewerFragment.getInstance(it))
-            }
+//            if(image.isVideo){
+//                addFragmentToActivity(VideoViewerFragment.getInstance(it))
+//            }else{
+//                addFragmentToActivity(ImageViewerFragment.getInstance(it))
+//            }
         }
     }
 

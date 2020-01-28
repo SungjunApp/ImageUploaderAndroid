@@ -6,10 +6,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 
-/**
- * Restful API Access Object for analytics APIs
- * Retrofit Document: https://square.github.io/retrofit/
- */
+
 public interface AnalyticsAPI {
     @POST
     Call<String> makeAnalyticsCall(
